@@ -1,0 +1,48 @@
+name: Catalogue CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20.19.0", "24.x"]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Smoke the compiled service
+        shell: bash
+        run: |
+          node dist/server/index.js > catalogue-smoke.log 2>&1 &
+          service_pid=$!
+          trap 'kill "$service_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3001/ready > /dev/null; then
+              npm run smoke
+              exit 0
+            fi
+            if ! kill -0 "$service_pid" 2>/dev/null; then
+              cat catalogue-smoke.log
+              exit 1
+            fi
+            sleep 0.2
+          done
+          cat catalogue-smoke.log
+          exit 1

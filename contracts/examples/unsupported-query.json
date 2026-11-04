@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "UNSUPPORTED_QUERY",
+    "message": "Search and category filtering are participant work, not implemented in this starter."
+  }
+}

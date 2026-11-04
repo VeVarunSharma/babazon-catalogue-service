@@ -1,0 +1,6 @@
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Unknown query parameter."
+  }
+}

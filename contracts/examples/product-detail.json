@@ -1,0 +1,16 @@
+{
+  "product": {
+    "id": "aurora-desk-lamp",
+    "name": "Aurora Desk Lamp",
+    "shortDescription": "Warm, focused light with a compact adjustable arm.",
+    "description": "A softly diffused desk lamp designed for focused work, reading, and calm evening light.",
+    "category": "office",
+    "priceCents": 4299,
+    "rating": 4.7,
+    "reviewCount": 184,
+    "availability": "in-stock",
+    "badge": "Workshop pick",
+    "features": ["Three brightness levels", "USB-C powered", "Folds flat"],
+    "accent": "sunset"
+  }
+}
