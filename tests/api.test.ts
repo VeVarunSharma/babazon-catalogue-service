@@ -1,7 +1,9 @@
+import { Ajv2020 } from "ajv/dist/2020.js";
 import request from "supertest";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../src/server/app.js";
 import { productCategories, productSchema } from "../src/shared/contracts.js";
+import schema from "../contracts/catalogue-v1.schema.json" with { type: "json" };
 import listExample from "../contracts/examples/products-list.json" with { type: "json" };
 import detailExample from "../contracts/examples/product-detail.json" with { type: "json" };
 import healthExample from "../contracts/examples/health.json" with { type: "json" };
@@ -13,6 +15,7 @@ import notReadyExample from "../contracts/examples/not-ready.json" with { type: 
 
 const app = createApp();
 const product = productSchema.parse(detailExample.product);
+const validateResponse = new Ajv2020({ allErrors: true }).compile(schema);
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -69,6 +72,8 @@ describe("participant-owned queries", () => {
   ])("rejects a well-formed unsupported query: %s", async (query) => {
     const response = await request(app).get(`/api/products?${query}`).expect(400);
     expect(response.body).toEqual(unsupportedExample);
+    const body: unknown = response.body;
+    expect(validateResponse(body), JSON.stringify(validateResponse.errors)).toBe(true);
   });
 
   it.each([

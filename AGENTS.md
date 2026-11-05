@@ -10,8 +10,8 @@ The Plan must define acceptance criteria, exclusions, repository-qualified issue
 
 The four participant children are:
 
-1. **Service contract:** own `contracts/**`, `src/shared/contracts.ts`, and `tests/contracts.test.ts`. Stabilize the proposed query semantics and examples before dependent implementation.
-2. **Service queries:** own `src/server/**`, `tests/api.test.ts`, and `scripts/smoke.ts`. Depend on the reviewed contract child; implement only the agreed service behavior in the participant's copy.
+1. **Service contract:** own `contracts/**`, `src/shared/contracts.ts`, and `tests/contracts.test.ts`. Stabilize shapes and examples without changing HTTP behavior.
+2. **Service queries:** own `src/server/**`, `tests/api.test.ts`, and `scripts/smoke.ts`. After the contract review, implement query behavior and normalization here. Update query HTTP expectations here, not in contract tests.
 3. **App integration:** own the app repository's server-side catalogue adapter/configuration and focused adapter tests. Depend on the reviewed contract child; do not edit service files.
 4. **Integration evidence:** own the app repository's cross-service tests and evidence on the parent issue. Depend on the preceding three children; record both commits and real two-process results.
 

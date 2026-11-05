@@ -25,8 +25,8 @@ The source decisions were approved in [VeVarunSharma/build-days-agentic-sdlc#34]
 | `src/server/index.ts` | Validated port, loopback listener, startup errors, and shutdown |
 | `contracts/catalogue-v1.schema.json` | Service-owned, versioned response contract |
 | `contracts/examples/` | Exact browse/detail, health/readiness, and error examples |
-| `tests/api.test.ts` | Endpoint behavior, validation, and intentional participant gaps |
-| `tests/contracts.test.ts` | Seed fidelity, schema/example consistency, and actual HTTP envelopes |
+| `tests/api.test.ts` | Endpoint behavior, including changing query status/body expectations |
+| `tests/contracts.test.ts` | Seed fidelity, schema/examples, and stable HTTP envelopes |
 | `scripts/smoke.ts` | Checks against a separately running service |
 
 There is no persistence layer or generic repository abstraction. `createApp` accepts an in-memory product array so readiness failure can be exercised without external resources. Request handling never changes that data.
@@ -50,7 +50,7 @@ Start with one outcome issue in the app copy. Review a **Copilot App Plan** on t
 | 3. App integration | App copy: server adapter/configuration and focused adapter tests | Child 1 |
 | 4. Integration evidence | App copy: distinct cross-service tests; evidence on the parent issue | Children 1, 2, and 3 |
 
-The contract child decides supported query semantics and response compatibility; it does not implement filtering. Service and app implementation can then proceed in separate isolated sessions. The integration child checks the composed behavior only after both implementations exist. The coordinator settles any shared-path change before assigning it; do not let two sessions edit the same surface.
+The contract child changes shapes/examples, not HTTP behavior. Query normalization and changing HTTP expectations belong to the service-query child. Service and app sessions then work independently; integration follows both. The coordinator resolves any ownership change first.
 
 The service's current response schema intentionally describes the starter, including its empty query echo. When the contract child enables new query behavior, it must review the version/compatibility decision and update the schema, types, examples, and contract assertions first. Preserve existing browse/detail requests. Query implementation then updates the service's unsupported-query assertions and smoke cases to match the reviewed feature.
 

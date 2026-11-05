@@ -94,7 +94,6 @@ describe("versioned contract and examples", () => {
     ["/ready", 200, "ReadyResponse"],
     ["/api/products", 200, "ProductListResponse"],
     ["/api/products/aurora-desk-lamp", 200, "ProductDetailResponse"],
-    ["/api/products?q=lamp", 400, "ApiError"],
     ["/api/products?sort=price", 400, "ApiError"],
     ["/api/products?category=unknown", 400, "ApiError"],
     ["/api/products/not-a-product", 404, "ApiError"],
